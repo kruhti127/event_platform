@@ -31,10 +31,15 @@ const populateEvent = (query: any) => {
 export async function createEvent({ userId, event, path }: CreateEventParams) {
   try {
     await connectToDatabase()
-
+    
     const organizer = await User.findById(userId)
-    if (!organizer) throw new Error('Organizer not found')
-
+    if (!organizer) {
+      throw new Error('Organizer not found')
+    }
+    console.log({
+      catergoryId : event.categoryId,
+      organizerId : userId,
+    })
     const newEvent = await Event.create({ ...event, category: event.categoryId, organizer: userId })
     revalidatePath(path)
 
